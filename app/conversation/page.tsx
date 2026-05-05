@@ -58,7 +58,10 @@ export default function ConversationPage() {
       setPendingTranscript(transcript);
       setPhase('transcript_review');
     }
-  }, [recorderState, transcript, setPendingTranscript, setPhase]);
+    // setPendingTranscript and setPhase are inline arrow functions — new refs every render.
+    // Including them would cause an infinite loop, so only trigger on recorder state changes.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [recorderState, transcript]);
 
   const handleSend = async (text: string) => {
     reset();
