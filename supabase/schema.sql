@@ -72,9 +72,11 @@ CREATE TABLE IF NOT EXISTS user_streak (
   updated_at        TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
--- RLS disabled for single-user mode
-ALTER TABLE sessions   DISABLE ROW LEVEL SECURITY;
-ALTER TABLE mistakes   DISABLE ROW LEVEL SECURITY;
-ALTER TABLE vocabulary DISABLE ROW LEVEL SECURITY;
-ALTER TABLE exercises  DISABLE ROW LEVEL SECURITY;
-ALTER TABLE user_streak DISABLE ROW LEVEL SECURITY;
+-- RLS enabled on all tables. All app queries use the service role key
+-- (SUPABASE_SERVICE_ROLE_KEY) which bypasses RLS, so no policies are needed.
+-- The public anon key has no access to any table.
+ALTER TABLE sessions    ENABLE ROW LEVEL SECURITY;
+ALTER TABLE mistakes    ENABLE ROW LEVEL SECURITY;
+ALTER TABLE vocabulary  ENABLE ROW LEVEL SECURITY;
+ALTER TABLE exercises   ENABLE ROW LEVEL SECURITY;
+ALTER TABLE user_streak ENABLE ROW LEVEL SECURITY;
