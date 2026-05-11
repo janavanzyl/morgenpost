@@ -20,6 +20,7 @@ const statusConfig = {
 
 export default function StoryCard({ session, index }: StoryCardProps) {
   const [expanded, setExpanded] = useState(false);
+  const [showEnglish, setShowEnglish] = useState(false);
   const router = useRouter();
   const { setActiveSessionId } = useStore();
 
@@ -46,11 +47,21 @@ export default function StoryCard({ session, index }: StoryCardProps) {
           {index + 1}
         </span>
         <div className="flex-1 min-w-0">
-          <p className="text-[10px] uppercase tracking-widest text-morning-700 font-medium mb-0.5">
-            {session.news_source}
-          </p>
+          <div className="flex items-center gap-2 mb-0.5">
+            <p className="text-[10px] uppercase tracking-widest text-morning-700 font-medium">
+              {session.news_source}
+            </p>
+            {session.german_title && (
+              <button
+                onClick={(e) => { e.stopPropagation(); setShowEnglish((v) => !v); }}
+                className="text-[9px] uppercase tracking-widest text-ink-400 border border-ink-300 rounded px-1 py-0.5 hover:text-ink-600 hover:border-ink-500 transition-colors"
+              >
+                {showEnglish ? 'DE' : 'EN'}
+              </button>
+            )}
+          </div>
           <p className="font-serif text-sm font-semibold text-ink-900 leading-snug line-clamp-2">
-            {session.news_title}
+            {session.german_title && !showEnglish ? session.german_title : session.news_title}
           </p>
         </div>
         <span className="flex-shrink-0 text-ink-400 text-lg leading-none mt-0.5">

@@ -12,6 +12,7 @@ export interface Session {
   date: string;
   story_index: number;
   news_title: string;
+  german_title: string | null;
   news_url: string;
   news_source: string;
   german_briefing: string;

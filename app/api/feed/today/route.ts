@@ -54,7 +54,7 @@ Respond with JSON where each key is the source number (1-based) and value is the
 async function generateBriefing(
   newsTitle: string,
   newsDescription: string
-): Promise<{ germanBriefing: string; quote: string; quoteAuthor: string | null }> {
+): Promise<{ germanTitle: string; germanBriefing: string; quote: string; quoteAuthor: string | null }> {
   const response = await getAnthropic().messages.create({
     model: 'claude-haiku-4-5-20251001',
     max_tokens: 700,
@@ -64,13 +64,14 @@ async function generateBriefing(
     messages: [
       {
         role: 'user',
-        content: `Based on this positive news story, write a German summary for B1 learners that is AT LEAST 170 words long. You may use your own knowledge about the topic to add context beyond what is given. Structure it in 3 short paragraphs: (1) what happened, (2) why it matters and what makes it significant, (3) what it could mean for the future. Use clear, common vocabulary and short sentences. Vary between present and perfect tense. Also provide an inspirational German quote relevant to the theme.
+        content: `Based on this positive news story, write a German title and summary for B1 learners. The summary must be AT LEAST 170 words. You may use your own knowledge to add context. Structure the summary in 3 short paragraphs: (1) what happened, (2) why it matters, (3) what it means for the future. Use clear vocabulary and short sentences. Vary tenses. Also provide an inspirational German quote relevant to the theme.
 
 News Title: ${newsTitle}
 News Summary: ${newsDescription}
 
 Respond with this exact JSON:
 {
+  "germanTitle": "...",
   "germanBriefing": "...",
   "quote": "...",
   "quoteAuthor": "..." or null
@@ -125,6 +126,7 @@ export async function GET() {
       } catch (err) {
         console.error(`[feed] generateBriefing failed for story ${idx}, using fallback:`, err);
         briefing = {
+          germanTitle: null as unknown as string,
           germanBriefing: `Heute gibt es eine interessante Geschichte: ${story.title}. ${story.description.slice(0, 300)}`,
           quote: 'Jeder Tag bringt neue Möglichkeiten.',
           quoteAuthor: null,
@@ -139,6 +141,7 @@ export async function GET() {
               date: today,
               story_index: idx,
               news_title: story.title,
+              german_title: briefing.germanTitle ?? null,
               news_url: story.url,
               news_source: story.source,
               german_briefing: briefing.germanBriefing,
