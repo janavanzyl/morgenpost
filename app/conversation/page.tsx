@@ -40,7 +40,10 @@ export default function ConversationPage() {
     startRecording,
     stopRecording,
     reset,
-  } = useVoiceRecorder();
+  } = useVoiceRecorder((t) => {
+    setPendingTranscript(t);
+    setPhase('transcript_review');
+  });
 
   useEffect(() => {
     if (!session) return;
@@ -52,16 +55,6 @@ export default function ConversationPage() {
       }
     }
   }, [session, phase, initConversation, setPhase]);
-
-  useEffect(() => {
-    if (recorderState === 'done' && transcript) {
-      setPendingTranscript(transcript);
-      setPhase('transcript_review');
-    }
-    // setPendingTranscript and setPhase are inline arrow functions — new refs every render.
-    // Including them would cause an infinite loop, so only trigger on recorder state changes.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [recorderState, transcript]);
 
   const handleSend = async (text: string) => {
     reset();

@@ -14,7 +14,7 @@ function getSupportedMimeType(): string {
   return types.find((t) => MediaRecorder.isTypeSupported(t)) ?? '';
 }
 
-export function useVoiceRecorder() {
+export function useVoiceRecorder(onTranscriptReady?: (transcript: string) => void) {
   const [recorderState, setRecorderState] = useState<RecorderState>('idle');
   const [transcript, setTranscript] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -23,6 +23,11 @@ export function useVoiceRecorder() {
   const chunksRef = useRef<Blob[]>([]);
   const streamRef = useRef<MediaStream | null>(null);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Keep a ref so the onstop closure always calls the latest callback
+  // without needing it as a useEffect dependency.
+  const onTranscriptReadyRef = useRef(onTranscriptReady);
+  onTranscriptReadyRef.current = onTranscriptReady;
 
   const stopTracks = useCallback(() => {
     streamRef.current?.getTracks().forEach((t) => t.stop());
@@ -76,6 +81,7 @@ export function useVoiceRecorder() {
           const { transcript: t } = await res.json();
           setTranscript(t);
           setRecorderState('done');
+          onTranscriptReadyRef.current?.(t);
         } catch {
           setError('Transkription fehlgeschlagen. Bitte nochmal versuchen.');
           setRecorderState('error');
