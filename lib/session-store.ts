@@ -197,7 +197,7 @@ export const useStore = create<SessionStore>()(
     {
       name: `morgenpost-v2-${today()}`,
       partialize: (state) => ({
-        // dailySessions intentionally NOT persisted — always re-fetched from server
+        dailySessions: state.dailySessions,
         activeSessionId: state.activeSessionId,
         conversations: state.conversations,
         analyses: state.analyses,

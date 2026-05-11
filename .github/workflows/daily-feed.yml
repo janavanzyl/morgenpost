@@ -1,0 +1,15 @@
+name: Daily Feed Pre-load
+
+on:
+  schedule:
+    - cron: '0 4 * * *'  # 4am UTC = 6am CEST (summer) / 5am CET (winter)
+  workflow_dispatch:      # allows manual trigger from GitHub Actions tab
+
+jobs:
+  preload:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pre-load today's stories
+        run: |
+          curl -f -s "https://morgenpost.vercel.app/api/feed/today" > /dev/null
+          echo "Feed pre-loaded successfully"

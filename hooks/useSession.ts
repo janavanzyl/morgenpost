@@ -18,7 +18,8 @@ export function useFeed() {
     let cancelled = false;
 
     const load = async () => {
-      setFeedLoading(true);
+      // Only show loading spinner if we have no cached sessions yet
+      if (dailySessions.length === 0) setFeedLoading(true);
       setFeedError(null);
       try {
         const res = await fetch('/api/feed/today');

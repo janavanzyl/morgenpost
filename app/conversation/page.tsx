@@ -35,7 +35,6 @@ export default function ConversationPage() {
 
   const {
     recorderState,
-    transcript,
     error: recorderError,
     startRecording,
     stopRecording,
