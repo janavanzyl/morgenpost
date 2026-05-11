@@ -111,12 +111,15 @@ export const useStore = create<SessionStore>()(
       conversations: {},
       getConversation: (sid) => get().conversations[sid] ?? emptyConversation(),
       setConversationPhase: (sid, phase) =>
-        set((state) => ({
-          conversations: {
-            ...state.conversations,
-            [sid]: { ...(state.conversations[sid] ?? emptyConversation()), phase },
-          },
-        })),
+        set((state) => {
+          if ((state.conversations[sid] ?? emptyConversation()).phase === phase) return state;
+          return {
+            conversations: {
+              ...state.conversations,
+              [sid]: { ...(state.conversations[sid] ?? emptyConversation()), phase },
+            },
+          };
+        }),
       setCurrentExchange: (sid, n) =>
         set((state) => ({
           conversations: {
@@ -125,12 +128,15 @@ export const useStore = create<SessionStore>()(
           },
         })),
       setPendingTranscript: (sid, t) =>
-        set((state) => ({
-          conversations: {
-            ...state.conversations,
-            [sid]: { ...(state.conversations[sid] ?? emptyConversation()), pendingTranscript: t },
-          },
-        })),
+        set((state) => {
+          if ((state.conversations[sid] ?? emptyConversation()).pendingTranscript === t) return state;
+          return {
+            conversations: {
+              ...state.conversations,
+              [sid]: { ...(state.conversations[sid] ?? emptyConversation()), pendingTranscript: t },
+            },
+          };
+        }),
       setConversationError: (sid, e) =>
         set((state) => ({
           conversations: {
