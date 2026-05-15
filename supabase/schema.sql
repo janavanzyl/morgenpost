@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS sessions (
   user_id                 UUID NOT NULL,
   date                    DATE NOT NULL,
   news_title              TEXT NOT NULL,
+  german_title            TEXT,
   news_url                TEXT NOT NULL,
   news_source             TEXT NOT NULL DEFAULT 'Good News Network',
   german_briefing         TEXT NOT NULL,
