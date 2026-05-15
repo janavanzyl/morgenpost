@@ -120,12 +120,13 @@ export async function GET() {
       const story = stories[idx];
       console.log(`[feed] story ${idx}:`, story?.title ?? 'MISSING');
       if (!story) continue;
-      let briefing: { germanBriefing: string; quote: string; quoteAuthor: string | null };
+      let briefing: { germanTitle: string; germanBriefing: string; quote: string; quoteAuthor: string | null };
       try {
         briefing = await generateBriefing(story.title, story.description);
       } catch (err) {
         console.error(`[feed] generateBriefing failed for story ${idx}, using fallback:`, err);
         briefing = {
+          germanTitle: story.title,
           germanBriefing: `Heute gibt es eine interessante Geschichte: ${story.title}. ${story.description.slice(0, 300)}`,
           quote: 'Jeder Tag bringt neue Möglichkeiten.',
           quoteAuthor: null,
