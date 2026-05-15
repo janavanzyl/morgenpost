@@ -126,7 +126,6 @@ export async function GET() {
       } catch (err) {
         console.error(`[feed] generateBriefing failed for story ${idx}, using fallback:`, err);
         briefing = {
-          germanTitle: null as unknown as string,
           germanBriefing: `Heute gibt es eine interessante Geschichte: ${story.title}. ${story.description.slice(0, 300)}`,
           quote: 'Jeder Tag bringt neue Möglichkeiten.',
           quoteAuthor: null,
