@@ -3,6 +3,8 @@ import { getAnthropic } from '@/lib/anthropic';
 import { getSupabaseAdmin } from '@/lib/supabase-server';
 import { Message, AnalysisResult } from '@/types';
 
+export const maxDuration = 60;
+
 export async function POST(req: NextRequest) {
   try {
     const { sessionId }: { sessionId: string } = await req.json();

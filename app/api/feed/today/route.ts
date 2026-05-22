@@ -5,6 +5,7 @@ import { fetchStoryCandidates } from '@/lib/rss';
 import { NewsItem, Session } from '@/types';
 
 export const dynamic = 'force-dynamic';
+export const maxDuration = 60;
 
 // Picks the single most compelling story from each source's candidates.
 // Guarantees exactly 1 story per source (5 total).
